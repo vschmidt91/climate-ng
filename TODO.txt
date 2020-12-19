@@ -1,0 +1,11 @@
+Empfänger:
+
+- statt Messwert-ID die Anzahl der jeweiligen Messwerte anzeigen
++ Battery in datenbank runden
+
+Webserver:
+
++ Plural DELETE
++ abs. Feuchte bei CSV-Export mit Komma statt Punkt
+- Kalibrierung
++ Sensor-ID immer anzeigen trotz Alias

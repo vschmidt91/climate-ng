@@ -1,0 +1,33 @@
+<mat-card *ngIf="settings.$settings | async as settings">
+  <form (ngSubmit)="onSubmit(settings)">
+    <mat-card-title>
+      <h3>Konfiguration</h3>
+    </mat-card-title>
+    <mat-card-content>
+
+      <mat-form-field>
+        <select [(ngModel)]="settings.interval" id="interval" name="interval" matNativeControl>
+          <option *ngFor="let i of intervals" value="{{i.value}}">{{i.viewValue}}</option>
+        </select>
+        <mat-placeholder>Messintervall</mat-placeholder>
+      </mat-form-field>
+
+    </mat-card-content>
+    <mat-card-actions>
+
+      <button mat-raised-button type="submit" color="primary" class="btn btn-success">Speichern</button>
+  
+    </mat-card-actions>
+  </form>
+</mat-card>
+
+<mat-card>
+  <mat-card-title>
+    <h3>Zurücksetzen</h3>
+  </mat-card-title>
+  <mat-card-actions>
+
+    <button (click)="onDeleteMeasurements()" mat-raised-button color="warn" class="btn-warn">Alle Messwerte löschen</button>
+
+  </mat-card-actions>
+</mat-card>

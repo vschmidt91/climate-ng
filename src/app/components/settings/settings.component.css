@@ -1,0 +1,9 @@
+
+mat-card {
+    min-width: 120px;
+    max-width: 360px;
+}
+
+button, select, mat-form-field {
+    width: 100%;
+}

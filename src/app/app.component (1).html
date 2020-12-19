@@ -1,0 +1,31 @@
+
+<mat-toolbar>
+  <mat-toolbar-row>
+    <button type="button" mat-icon-button (click)="drawer.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <h1>Climate Watcher</h1>
+    <div id="version" *ngIf="settingsService.$settings | async as settings">
+        <h5>Version {{settings.version}}</h5>
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>
+  
+<mat-sidenav-container>
+  <mat-sidenav #drawer mode="side" opened="false" role="navigation">
+    <mat-nav-list>
+      <a mat-list-item [routerLink]="['/']">Überblick</a>
+      <div *ngIf="settingsService.$settings | async as settings">
+        <div *ngIf="measurementsService.$ids | async as ids">
+          <hr>
+          <a *ngFor="let id of ids" mat-list-item [routerLink]="['/measurements', id]">{{settingsService.getAlias(settings, id)}}</a>
+          <hr>
+        </div>
+      </div>
+      <a mat-list-item [routerLink]="['/settings']">Einstellungen</a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+      <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

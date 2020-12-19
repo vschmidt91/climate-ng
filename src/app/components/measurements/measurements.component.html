@@ -1,0 +1,169 @@
+
+<!-- <label for="count">
+  Anzahl Messwerte
+</label>
+<select [(ngModel)]="count" name="count" id="count" matNativeControl required>
+  <option *ngFor="let c of counts" value="{{c.value}}">{{c.viewValue}}</option>
+</select> -->
+
+<div *ngIf="$id | async as id">
+  <div *ngIf="$views | async as views">
+    <div *ngIf="settings.$settings | async as settings">
+
+      <h1>
+        {{ getAlias(settings, id) }}
+        <button type="button" mat-icon-button (click)="onSetAlias(id, settings)">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </h1>
+
+      <mat-tab-group>
+        <mat-tab label="Verlauf">
+
+          <mat-card>
+            <mat-card-content>
+              <mat-form-field>
+                <select (change)="updateChart(views)" [(ngModel)]="duration" id="duration" name="duration" matNativeControl>
+                  <option *ngFor="let d of durations" value="{{d.value}}">{{d.viewValue}}</option>
+                </select>
+                <mat-placeholder>Zeitraum</mat-placeholder>
+              </mat-form-field>
+            </mat-card-content>
+          </mat-card>
+          
+          <mat-card chart-card *ngIf="chartTemperature.length">
+            <mat-card-title>
+              <h3>Temperatur (°C)</h3>
+            </mat-card-title>
+            <mat-card-content>
+              <canvas
+                baseChart
+                [chartType]="'scatter'"
+                [datasets]="chartTemperature"
+                [options]="chartTemperatureOptions"
+                [legend]="false">
+              </canvas>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card chart-card *ngIf="chartHumidity.length">
+            <mat-card-title>
+              <h3>Feuchtigkeit (%)</h3>
+            </mat-card-title>
+            <mat-card-content>
+              <canvas
+                baseChart
+                [chartType]="'scatter'"
+                [datasets]="chartHumidity"
+                [options]="chartHumidityOptions"
+                [legend]="false">
+              </canvas>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card chart-card *ngIf="chartHumidityAbsolute.length">
+            <mat-card-title>
+              <h3>Feuchtigkeit (g/m³)</h3>
+            </mat-card-title>
+            <mat-card-content>
+              <canvas
+                baseChart
+                [chartType]="'scatter'"
+                [datasets]="chartHumidityAbsolute"
+                [options]="chartHumidityAbsoluteOptions"
+                [legend]="false">
+              </canvas>
+            </mat-card-content>
+          </mat-card>
+
+        </mat-tab>
+        <mat-tab label="Daten">
+
+          <mat-card>
+            <mat-card-actions>
+              <button mat-raised-button color="warn" (click)="onDeleteSelected(views)">Ausgewählte löschen</button>
+            </mat-card-actions>
+          </mat-card>
+          
+          <table mat-table [dataSource]="views">
+
+            <ng-container matColumnDef="selected">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let view">
+                <mat-checkbox [(ngModel)]="view.selected">
+                </mat-checkbox>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="timestamp">
+              <th mat-header-cell *matHeaderCellDef>Zeit</th>
+              <td mat-cell *matCellDef="let view"> {{view.datetime}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="humidity">
+              <th mat-header-cell *matHeaderCellDef>Feuchtigkeit (%)</th>
+              <td mat-cell *matCellDef="let view">
+                {{view.humidity}}
+                <!-- <br> -->
+                <mat-progress-bar mode="determinate" value="{{view.raw.humidity}}"></mat-progress-bar>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="humidity_absolute">
+              <th mat-header-cell *matHeaderCellDef>Feuchtigkeit (g/m³)</th>
+              <td mat-cell *matCellDef="let view">
+                {{view.humidity_absolute_string}}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="temperature">
+              <th mat-header-cell *matHeaderCellDef>Temperatur (°C)</th>
+              <td mat-cell *matCellDef="let view"> {{view.temperature}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="battery">
+              <th mat-header-cell *matHeaderCellDef>Batterie (%)</th>
+              <td mat-cell *matCellDef="let view">
+                {{view.battery}}
+                <!-- <br> -->
+                <mat-progress-bar mode="determinate" value="{{view.raw.battery}}"></mat-progress-bar>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="retries">
+              <th mat-header-cell *matHeaderCellDef>Empfang (%)</th>
+              <td mat-cell *matCellDef="let view">
+                {{view.quality}}
+                <!-- <br> -->
+                <mat-progress-bar mode="determinate" value="{{view.quality}}"></mat-progress-bar>
+              </td>
+            </ng-container>
+
+            <!-- <ng-container matColumnDef="delete">
+              <th mat-header-cell *matHeaderCellDef>Löschen</th>
+              <td mat-cell *matCellDef="let view">
+                  <button mat-icon-button (click)="onDeleteMeasurement(view)">
+                    <mat-icon color="warn">delete</mat-icon>
+                  </button>
+              </td>
+            </ng-container> -->
+
+            <tr mat-header-row *matHeaderRowDef="columns"></tr>
+            <tr mat-row *matRowDef="let row; columns: columns"></tr>
+
+          </table>
+
+        </mat-tab>
+        <mat-tab label="Aktionen">
+          <mat-card>
+            <mat-card-actions>
+              <button mat-raised-button color="primary" (click)="onExportCSV(getAlias(settings, id), views)">Exportieren</button>
+              <button mat-raised-button color="warn" (click)="onDeleteAll(views)">Alle löschen</button>
+            </mat-card-actions>
+          </mat-card>
+        </mat-tab>
+      </mat-tab-group>
+
+    </div>
+  </div>
+</div>

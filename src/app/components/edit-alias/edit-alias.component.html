@@ -1,0 +1,9 @@
+<div mat-dialog-content>
+    <mat-form-field>
+        <input matInput [(ngModel)]="alias">
+    </mat-form-field>
+</div>
+<div mat-dialog-actions>
+    <button mat-raised-button color="primary" [mat-dialog-close]="alias" cdkFocusInitial>Speichern</button>
+    <button mat-raised-button (click)="onCancel()">Abbrechen</button>
+</div>
